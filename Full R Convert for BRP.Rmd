@@ -1,0 +1,45 @@
+---
+title: "R Easy Convert for BRP"
+author: "Mitch Robertson"
+date: "4/29/2022"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(
+	echo = TRUE,
+	message = FALSE,
+	warning = FALSE
+)
+```
+
+```{r}
+library(readr)
+```
+
+```{r}
+#import data
+df <- read_csv("INSERT NAME OF FILE HERE.csv") #File must be in Working directory 
+```
+
+```{r}
+#make first and last name objects
+Name <- df$`Student Name`
+firstname <-  sapply(strsplit(Name, ' '), function(x) x[1])
+lastname <-  sapply(strsplit(Name, ' '), function(x) x[length(x)])
+#Convert SIS ID to SSO ID
+#add trailing @cpp.edu
+SSOID <- df$`Student SIS ID`
+SSOID <- paste0(SSOID,"@cpp.edu")
+#bind into vector
+df <- cbind(firstname, lastname, SSOID, df$Email)
+#convert to df
+df <- data.frame(df)
+```
+
+```{r}
+#install.packages("writexl")
+library("writexl")
+write.xlsx(df, 'INSERT DESIRED NAME OF FILE HERE.xlsx')
+```
+
